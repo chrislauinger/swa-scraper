@@ -42,4 +42,4 @@ class SWACrawlerScript(object):
 		reactor.run()
 
 if __name__ == '__main__':
-	SWACrawlerScript(origin="OAK", destination="DEN", date="January 14th, 2016", debug=True).run()
+	SWACrawlerScript(origin="OAK", destination="DEN", date="January 16th, 2016", debug=True).run()
