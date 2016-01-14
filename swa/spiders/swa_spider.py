@@ -1,15 +1,15 @@
 from swa.items import *
-from scrapy.spider import BaseSpider
+from scrapy.spiders import Spider
 from scrapy.http import FormRequest
 from scrapy.selector.lxmlsel import HtmlXPathSelector
-from scrapy import log
 from datetime import datetime, timedelta
 from dateutil.parser import parse as dateParse
 import re
+import itertools, collections
 
 class Util(object):
 	@classmethod
-	def parseFlight(_class, string, date):
+	def parseFlight(_class, string, date, points = None):
 		""" General format:
 		Departing flight    123(/456)   $0000    12:30AM depart    7:25AM arrive     (Non/1/2)stop    (Change planes in XXX)
 		[always]			[flt1/2]    [price]  [departure]       [arrival]   		 [# stops] 		  [connection]
@@ -26,7 +26,9 @@ class Util(object):
 		stops = int(infoList[4]) if infoList[4] != 'Non' else 0	
 		
 		# Parse connecting airports (if applicable)
-		if ( infoList[5] not in SWAFareSpider.cities ):
+		if stops == 0:
+			connectingArpts = None
+		elif ( infoList[5] not in SWAFareSpider.cities ):
 			# no valid connection
 			connectingArpts = None
 		else:
@@ -42,22 +44,26 @@ class Util(object):
 		# Build flight info dict
 		flight = {
 			'flight': tuple(infoList[0].split('/')),
-			'price': infoList[1],
+			'price': infoList[1][1:],
 			'depart': departureDT,
 			'arrive': arrivalDT,
 			'stops': stops,
 			'connectingArpts': connectingArpts,
-			'fareValidityDate': datetime.now()
+			'fareValidityDate': datetime.now(), 
+			'points' : points
 		}
 
 		return flight
 
-class SWAFareSpider(BaseSpider):
+class SWAFareSpider(Spider):
 	"""A spider to scrape the Southwest site for fare pricing."""
 	
 	FORMNAME = "buildItineraryForm"
-	name = 'southwest.com'
+
+	name = "southwestFare"
+
 	start_urls = ['http://www.southwest.com/flight/search-flight.html']
+	
 	cities = ['GSP', 'FNT', 'BOS', 'OAK', 'LIT', 'BOI', 'SAN', 'DCA', 'LBB', 'BWI', 
 	'PIT', 'RIC', 'SAT', 'JAX', 'IAD', 'JAN', 'HRL', 'CHS', 'EYW', 'BNA',
 	'PHL', 'SNA', 'SFO', 'PHX', 'LAX', 'MAF', 'LAS', 'CRP', 'CMH', 'FLL', 
@@ -89,7 +95,7 @@ class SWAFareSpider(BaseSpider):
 		queryData["twoWayTrip"] = "false"
 		queryData["adultPassengerCount"] = "1"
 		queryData["outboundTimeOfDay"] = "ANYTIME"
-		queryData["fareType"] = "DOLLARS"
+		queryData["fareType"] = "POINTS"
 		
 		queryData["originAirport"] = self.lookupCity(self.origin)
 		queryData["destinationAirport"] = self.lookupCity(self.destination)
@@ -110,7 +116,8 @@ class SWAFareSpider(BaseSpider):
 		
 		html = HtmlXPathSelector(response)
  		errors = html.select("//ul[@id='errors']/li/text()")
-		
+		print("ERRORS")
+		print(errors)
 		# Catch errors given by Southwest's page
 		if ( len(errors) > 0 ):
 			self.log("Error: %s" % theError , level=log.ERROR)
@@ -123,29 +130,47 @@ class SWAFareSpider(BaseSpider):
 			'//table[@id="faresOutbound"]//td[@class="price_column"][1]' + xpath, # anytime
 			'//table[@id="faresOutbound"]//td[@class="price_column"][2]' + xpath  # wanna get away
 			]
+		points_path = '//div[@class="productPricing"]//label/text()'
+		points_selectors = [
+			'//table[@id="faresOutbound"]//td[@class="price_column "]' + points_path ,   # business select points
+			'//table[@id="faresOutbound"]//td[@class="price_column"][1]' + points_path, # anytime
+			'//table[@id="faresOutbound"]//td[@class="price_column"][2]' + points_path  # wanna get away	
+		]
 		fareList = []
+		pointsList = []
 		for selector in selectors:
-			fareList.append( html.select(selector).extract() )
-
+			fareList.append( html.select(selector).extract())
+		for selector in points_selectors:
+			pointsList.append(html.select(selector).extract())
 		# Process that info and load into a Fare() item.
-		i = 0
-		fareType = ["Business Select", "Anytime", "Wanna Get Away"]
-		for fare in fareList:
-			self.log("Faretype: %d %s" % (i, fareType[i]) )
-			for flightString in fare:
+		fareType = ["Business Select", "Anytime", "Wanna Get Away"] #assume this order is always descending price if available
+		fareTypeIndex = 0
+		#verify data integrity:
+		if not (len(fareList) == len(pointsList) and len(list(itertools.chain(*fareList))) == len(list(itertools.chain(*pointsList)))): 
+			return
+		allFlights = []
+		for fareTypeIndex in range(3):
+			self.log("Faretype: %d %s" % (fareTypeIndex, fareType[fareTypeIndex]) )
+			for flightIndex in range(len(fareList[fareTypeIndex])):
+				flightString = fareList[fareTypeIndex][flightIndex]
+				print(flightString)
 				if ( flightString[0] == 'D' ):
-					flightData = Util.parseFlight(flightString, self.outDate.date())
+					flightData = Util.parseFlight(flightString, self.outDate.date(), pointsList[fareTypeIndex][flightIndex])
 					self.log("Found: %s" % flightString)
 					flight = Fare()		
-			
 					for	key in flightData:
 						flight[key] = flightData[key]
 					flight['origin'] = self.origin
 					flight['destination'] = self.destination
 					flight['date'] = self.outDate
-					flight['faretype'] = fareType[i]
+					flight['faretype'] = fareType[fareTypeIndex]
 					self.log('Added')
-					yield flight
-				else:
-					continue
-			i += 1		
+					allFlights.append(flight)
+		
+		for flightIndex in range(len(allFlights)):
+			flight = allFlights[flightIndex]
+			if flight in allFlights[flightIndex+1:]:
+				continue
+			else:
+				yield flight
+					

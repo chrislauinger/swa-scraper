@@ -5,7 +5,6 @@ import swa.settings
 from twisted.internet import reactor
 from scrapy.crawler import Crawler
 from scrapy.settings import Settings
-from scrapy import log, signals
 
 class SWACrawlerScript(object):
 	def __init__(self, origin, destination, date, debug=False, defaultSettings=True):
@@ -43,4 +42,4 @@ class SWACrawlerScript(object):
 		reactor.run()
 
 if __name__ == '__main__':
-	SWACrawlerScript(origin="AUS", destination="PIT", date="August 14th, 2013", debug=True).run()
+	SWACrawlerScript(origin="OAK", destination="DEN", date="January 14th, 2016", debug=True).run()
