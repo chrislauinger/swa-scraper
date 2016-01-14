@@ -96,7 +96,7 @@ class SWAFareSpider(Spider):
 	def scrapeFlights(self, response):
 		"""Scrape the flights into a Fare() object."""
 		htmlSelector = Selector(response = response)
-		
+
 		if (len(htmlSelector.xpath("//ul[@id='errors']/li/text()").extract()) > 0 ):
 			self.log("Error: %s" % theError , level=log.ERROR)
 			return
@@ -116,10 +116,6 @@ class SWAFareSpider(Spider):
 		]
 		fareList = []
 		pointsList = []
-		# for selector in selectors:
-		#	fareList.append( html.select(selector).extract())
-		#for selector in points_selectors:
-		#	pointsList.append(html.select(selector).extract())
 		for selector in selectors:
 			fareList.append( htmlSelector.xpath(selector).extract())
 		for selector in points_selectors:
