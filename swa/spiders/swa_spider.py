@@ -67,7 +67,7 @@ class SWAFareSpider(Spider):
 		self.origin = fromCity
 		self.outDate = dateParse(date)
 		self.destination = toCity
-		
+
 	@classmethod
 	def lookupCity(_class, cityCode):
 		if cityCode in _class.cities:

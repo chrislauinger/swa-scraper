@@ -15,4 +15,10 @@ DEFAULT_ITEM_CLASS = 'swa.items.Fare'
 
 USER_AGENT = " "
 
-#ITEM_PIPELINES = ['swa.pipelines.CheckDuplicatesPipeline']
+ITEM_PIPELINES = {'swa.pipelines.MongoPipeline' : 100 } 
+
+MONGODB_SERVER = "localhost"
+MONGODB_PORT = 27017
+MONGODB_DB = "fares"
+#MONGODB_COLLECTION = "" 
+#collections are names using origin city then destination city code (ex: OAK_LAX)
