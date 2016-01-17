@@ -65,7 +65,10 @@ class SWAFareSpider(Spider):
 	def __init__(self, fromCity=None, date=None, toCity=None, *args, **kwargs):
 		super(SWAFareSpider, self).__init__(**kwargs)
 		self.origin = fromCity
-		self.outDate = dateParse(date)
+		if isinstance(date, datetime):
+			self.outDate = date
+		else:
+			self.outDate = dateParse(date)
 		self.destination = toCity
 
 	@classmethod
