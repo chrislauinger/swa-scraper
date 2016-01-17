@@ -2,39 +2,34 @@ from swa import *
 from swa.spiders.swa_spider import *
 import swa.settings
 
-from twisted.internet import reactor
 from scrapy.crawler import CrawlerProcess
 from scrapy.settings import Settings
+from scrapy.utils.project import get_project_settings
+
+from scrapy import signals
+from scrapy.exporters import JsonItemExporter
+
+from datetime import datetime, timedelta
+from itertools import permutations
 
 class SWACrawlerScript(object):
-	def __init__(self, origin, destination, date, debug=False, defaultSettings=True):
-		self.debug = debug
+	def __init__(self, origin, destination, date):
 		self.origin = origin
 		self.destination = destination
 		self.date = date
-		self.spider = SWAFareSpider(self.origin, self.date, self.destination)
-		
-		# initialize settings
-		settingValues = self.loadSettings() if defaultSettings else dict()
-		self.settings = Settings(values=settingValues)
-
-		# initialize crawler
-		self.process = CrawlerProcess(self.settings)
-		#self.crawler.configure()
-		
-		print "Set up"
-	def loadSettings(self):	
-		settingsList = [i for i in dir(swa.settings) if i[0] != "_"]
-		settingsDict = {}
-		for s in settingsList:
-			settingsDict[s] = eval("swa.settings.%s" % s)
-		return settingsDict
+		self.process = CrawlerProcess(get_project_settings())
 	
 	def run(self):
-		print "Running"
-		self.process.crawl(self.spider)
+		self.process.crawl(SWAFareSpider, fromCity = self.origin, date = self.date, toCity = self.destination)
 		self.process.start()
-		reactor.run()
+
+def runAllCitiesForAllDates(cities, dates):
+	process = CrawlerProcess(get_project_settings())
+	for pair in permutations(cities,2):
+		print(pair)	
 
 if __name__ == '__main__':
-	SWACrawlerScript(origin="OAK", destination="DEN", date="January 16th, 2016", debug=True).run()
+	cities = ['SFO', 'DEN']
+	dates = [datetime.now() + timedelta(days=30)]
+	runAllCitiesForAllDates(cities, dates)
+	#SWACrawlerScript(origin="OAK", destination="DEN", date="01/23/2016").run()
