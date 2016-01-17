@@ -8,6 +8,8 @@ from datetime import datetime, timedelta
 from dateutil.parser import parse as dateParse
 import re
 import itertools, collections
+import logging 
+
 
 class Util(object):
 	@classmethod
@@ -101,7 +103,7 @@ class SWAFareSpider(Spider):
 		htmlSelector = Selector(response = response)
 
 		if (len(htmlSelector.xpath("//ul[@id='errors']/li/text()").extract()) > 0 ):
-			self.log("Error: %s" % theError , level=log.ERROR)
+			logging.error("Error: %s" % theError)
 			return
 
 		# Conveniently packaged flight info in string form for form submission
@@ -130,10 +132,8 @@ class SWAFareSpider(Spider):
 			return
 		allFlights = []
 		for fareTypeIndex in range(3):
-			self.log("Faretype: %d %s" % (fareTypeIndex, fareType[fareTypeIndex]) )
 			for flightIndex in range(len(fareList[fareTypeIndex])):
 				flightString = fareList[fareTypeIndex][flightIndex]
-				self.log(flightString)
 				if ( flightString[0] == 'D' ):
 					flightData = Util.parseFlight(flightString, self.outDate.date(), pointsList[fareTypeIndex][flightIndex])
 					flight = Fare()		

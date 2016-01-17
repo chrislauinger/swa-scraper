@@ -12,6 +12,7 @@ from scrapy.exporters import JsonItemExporter
 
 from datetime import datetime, timedelta
 from itertools import permutations
+import time 
 
 class SWACrawlerScript(object):
 	def __init__(self, origin, destination, date):
@@ -26,15 +27,21 @@ class SWACrawlerScript(object):
 
 def runAllCitiesForAllDates(cities, dates):
 	#TODO: what's the limit on number of spiders to run, how to run in parrallel
+	a = time.time()
 	process = CrawlerProcess(get_project_settings())
 	for pair in permutations(cities,2):
 		for date in dates:
 			process.crawl(SWAFareSpider, fromCity = pair[0], date = date, toCity = pair[1])
+			break
+		break
 	d = process.join()
 	d.addBoth(lambda _: reactor.stop())
 	reactor.run() # the script will block here until all crawling jobs are finished
+	print("crawl time: " + str(time.time() - a))
 
 if __name__ == '__main__':
 	cities = ['SFO', 'DEN']
-	dates = [datetime.now() + timedelta(days=30)]
+	dates = []
+	for i in range(1,2):
+		dates.append(datetime.now() + timedelta(days=i))
 	runAllCitiesForAllDates(cities, dates)

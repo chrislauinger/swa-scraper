@@ -11,6 +11,11 @@ BOT_NAME = 'swa'
 SPIDER_MODULES = ['swa.spiders']
 NEWSPIDER_MODULE = 'swa.spiders'
 DEFAULT_ITEM_CLASS = 'swa.items.Fare'
+DOWNLOAD_DELAY = 0.25
+LOG_LEVEL = "ERROR"
+
+AWS_ACCESS_KEY_ID = ""
+AWS_SECRET_ACCESS_KEY = "" 
 
 
 USER_AGENT = " "
