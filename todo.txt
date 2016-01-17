@@ -1,5 +1,2 @@
-Check code failures
 Do not add repetitive entries
 
-Failured modes to test:
-no routes for city-city

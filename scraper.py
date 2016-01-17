@@ -32,15 +32,13 @@ def runAllCitiesForAllDates(cities, dates):
 	for pair in permutations(cities,2):
 		for date in dates:
 			process.crawl(SWAFareSpider, fromCity = pair[0], date = date, toCity = pair[1])
-			break
-		break
 	d = process.join()
 	d.addBoth(lambda _: reactor.stop())
 	reactor.run() # the script will block here until all crawling jobs are finished
 	print("crawl time: " + str(time.time() - a))
 
 if __name__ == '__main__':
-	cities = ['SFO', 'DEN']
+	cities = ['SFO', 'OAK','DEN']
 	dates = []
 	for i in range(1,2):
 		dates.append(datetime.now() + timedelta(days=i))

@@ -102,8 +102,12 @@ class SWAFareSpider(Spider):
 		"""Scrape the flights into a Fare() object."""
 		htmlSelector = Selector(response = response)
 
-		if (len(htmlSelector.xpath("//ul[@id='errors']/li/text()").extract()) > 0 ):
-			logging.error("Error: %s" % theError)
+		errors = htmlSelector.xpath("//ul[@id='errors']/li/text()").extract()
+		if (len(errors) > 0 ):
+			if "does not offer service" in errors[0]: 
+				logging.warning(errors) 
+			else: 
+				logging.error(errors)
 			return
 
 		# Conveniently packaged flight info in string form for form submission
