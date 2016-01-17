@@ -38,7 +38,8 @@ def runAllCitiesForAllDates(cities, dates):
 	print("crawl time: " + str(time.time() - a))
 
 if __name__ == '__main__':
-	cities = ['SFO', 'OAK','DEN']
+	cities = ['ATL','AUS','BWI','BOS','MDW','DEN','HOU','LAS','LAX','EWR','FLL',
+	'OAK','ONT','PHX','PDX','PVD','SLC','SAN','SFO','IAD'] #20 majors
 	dates = []
 	for i in range(1,2):
 		dates.append(datetime.now() + timedelta(days=i))
