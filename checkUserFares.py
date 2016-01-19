@@ -3,7 +3,13 @@ import pymongo
 from dateutil.parser import parse as dateParse
 from datetime import datetime, timedelta
 import swa.settings as settings
-from datetime import datetime, timedelta
+from swa.items import *
+
+
+def fareString(fare):
+	return "%s -> %s on %s at %s for $%s or %s points" % (fare['origin'], fare['destination'], 
+		fare['depart'].strftime("%m/%d/%Y"), fare['depart'].strftime("%H:%M"), str(fare['price']),
+		str(fare['points']))
 
 class BookedFlight():
 	def __init__(self, origin, date, destination, flightNumber, cost, usingPoints = False):
@@ -30,23 +36,31 @@ class BookedFlight():
 		#Returns current cost if cheaper, otherwise returns False
 		fares = self.getFareHistory()
 		mostRecentFare = fares[0]
-		print(mostRecentFare)
 		if (mostRecentFare['fareValidityDate'] < (datetime.now() - timedelta(days = 1))):
 			runUserFlights([self])
 		fares = self.getFareHistory(False)
 		mostRecentFare = fares[0]
+		print(fareString(mostRecentFare))
 		mostRecentCost = mostRecentFare['points'] if self.usingPoints else mostRecentFare['price']
-		if (int(mostRecentCost.replace(",","")) < int(self.cost)):
-			print("Found a cheaper fare: " + str(mostRecentCost))
+		if type(mostRecentCost) == str:
+			mostRecentCost = int(mostRecentCost.replace(",",""))
+		if (mostRecentCost < int(self.cost)):
+			print("Found a cheaper fare: %s < %s" % (str(mostRecentCost), self.cost))
 			return int(mostRecentCost)
 		else:
+			print("No savings: %s > %s" % (str(mostRecentCost), self.cost))
 			return False
 
 
 if __name__ == '__main__':
-	flight1 = BookedFlight('SFO',"02/10/2016",'DEN',3671,104)
-	flight2 = BookedFlight('DEN',"03/06/2016",'OAK',1715,6500,True)
-	flights = [flight1, flight2]
+	flights = []
+	flights.append(BookedFlight('SFO',"02/10/2016",'DEN',3671,104))
+	flights.append(BookedFlight('DEN',"02/15/2016",'OAK',495,9200, True))
+	flights.append(BookedFlight('DEN',"02/16/2016",'OAK',495,5800, True))
+	flights.append(BookedFlight('SFO',"03/03/2016",'DEN',3671,9200, True))
+	flights.append(BookedFlight('DEN',"03/06/2016",'OAK',1715,6500,True))
+	#flights.append(BookedFlight('OAK',"04/15/2016",'BZE',1731,11000,True))
+	#flights.append(BookedFlight('BZE',"04/15/2016",'OAK',1023,11000,True))
 	#download fares
 	#runUserFlights(flights)
 	#grab prices from DB and compare
