@@ -37,7 +37,7 @@ def runAllCities(cities, days):
 
 if __name__ == '__main__':
 	cities =  ['SEA','BWI','SAN','MDW','DEN','HOU','LAX','SFO','OAK','PDX'] # majors
-	days = 1
+	days = 180
 	runAllCities(cities, days)
-	#takes about 1 hour to run 90 routes for 180 days 
+	#takes about 2 hours to run 90 routes for 180 days 
 	#TODO: use multiple reactor runs to run more than 90 routes (times out with too many spiders in one run)
