@@ -36,13 +36,13 @@ class Util(object):
 		
 		flight = {
 			'flight': tuple(infoList[0].split('/')),
-			'price': infoList[1][1:],
+			'price': int(infoList[1][1:].replace(",","")),
 			'depart': departureDT,
 			'arrive': arrivalDT,
 			'stops': stops,
 			'connectingArpts': connectingArpts,
 			'fareValidityDate': datetime.now(), 
-			'points' : points
+			'points' : int(points.replace(",",""))
 		}
 		return flight
 
