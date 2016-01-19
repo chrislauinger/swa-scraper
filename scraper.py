@@ -14,6 +14,13 @@ from datetime import datetime, timedelta
 from itertools import permutations
 import time 
 
+
+CITIES =  ['SEA','BWI','SAN','MDW','DEN','HOU','LAX','SFO','OAK','PDX']
+#CITIES = ['SEA','BWI']
+
+def getCityPairs():
+	return permutations(CITIES,2)
+
 def runUserFlights(userFlights):
 	a = time.time()
 	process = CrawlerProcess(get_project_settings())
@@ -25,10 +32,10 @@ def runUserFlights(userFlights):
 	reactor.run() # the script will block here until all crawling jobs are finished
 	print("crawl time: " + str(time.time() - a))
 
-def runAllCities(cities, days):
+def runAllCities(cityPairs, days):
 	a = time.time()
 	process = CrawlerProcess(get_project_settings())
-	for pair in permutations(cities,2):
+	for pair in cityPairs:
 		process.crawl(SWAFareSpider, fromCity = pair[0], days = days, toCity = pair[1])		
 	d = process.join()
 	d.addBoth(lambda _: reactor.stop())
@@ -36,8 +43,7 @@ def runAllCities(cities, days):
 	print("crawl time: " + str(time.time() - a))
 
 if __name__ == '__main__':
-	cities =  ['SEA','BWI','SAN','MDW','DEN','HOU','LAX','SFO','OAK','PDX'] # majors
-	days = 180
-	runAllCities(cities, days)
+	days = 1
+	runAllCities(getCityPairs(), days)
 	#takes about 2 hours to run 90 routes for 180 days 
 	#TODO: use multiple reactor runs to run more than 90 routes (times out with too many spiders in one run)
