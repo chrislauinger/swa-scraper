@@ -14,33 +14,30 @@ from datetime import datetime, timedelta
 from itertools import permutations
 import time 
 
-class SWACrawlerScript(object):
-	def __init__(self, origin, destination, date):
-		self.origin = origin
-		self.destination = destination
-		self.date = date
-		self.process = CrawlerProcess(get_project_settings())
-	
-	def run(self):
-		self.process.crawl(SWAFareSpider, fromCity = self.origin, date = self.date, toCity = self.destination)
-		self.process.start()
+def runUserFlights(userFlights):
+	a = time.time()
+	process = CrawlerProcess(get_project_settings())
+	for flight in userFlights:
+		process.crawl(SWAFareSpider, fromCity = flight.origin, days = 1, 
+			toCity = flight.destination, startDate = flight.date)		
+	d = process.join()
+	d.addBoth(lambda _: reactor.stop())
+	reactor.run() # the script will block here until all crawling jobs are finished
+	print("crawl time: " + str(time.time() - a))
 
-def runAllCitiesForAllDates(cities, dates):
-	#TODO: what's the limit on number of spiders to run, how to run in parrallel
+def runAllCities(cities, days):
 	a = time.time()
 	process = CrawlerProcess(get_project_settings())
 	for pair in permutations(cities,2):
-		for date in dates:
-			process.crawl(SWAFareSpider, fromCity = pair[0], date = date, toCity = pair[1])
+		process.crawl(SWAFareSpider, fromCity = pair[0], days = days, toCity = pair[1])		
 	d = process.join()
 	d.addBoth(lambda _: reactor.stop())
 	reactor.run() # the script will block here until all crawling jobs are finished
 	print("crawl time: " + str(time.time() - a))
 
 if __name__ == '__main__':
-	cities = ['ATL','AUS','BWI','BOS','MDW','DEN','HOU','LAS','LAX','EWR','FLL',
-	'OAK','ONT','PHX','PDX','PVD','SLC','SAN','SFO','IAD'] #20 majors
-	dates = []
-	for i in range(1,2):
-		dates.append(datetime.now() + timedelta(days=i))
-	runAllCitiesForAllDates(cities, dates)
+	cities =  ['SEA','BWI','SAN','MDW','DEN','HOU','LAX','SFO','OAK','PDX'] # majors
+	days = 1
+	runAllCities(cities, days)
+	#takes about 1 hour to run 90 routes for 180 days 
+	#TODO: use multiple reactor runs to run more than 90 routes (times out with too many spiders in one run)

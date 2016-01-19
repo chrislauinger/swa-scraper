@@ -8,7 +8,6 @@ from scrapy.item import Item, Field
 class Fare(Item):
 	origin = Field()
 	destination = Field()
-	date = Field()
 	flight = Field()
 	arrive = Field()
 	depart = Field()
@@ -21,7 +20,7 @@ class Fare(Item):
 
 	def __eq__(self, other):
 		if isinstance(other, self.__class__):
-			return (self['flight'] == other['flight'] and self['date'] == other['date'])
+			return (self['flight'] == other['flight'] and self['depart'] == other['depart'])
 		else:
 			return False
 

@@ -1,6 +1,6 @@
 from swa.items import *
 from scrapy.spiders import Spider
-from scrapy.http import FormRequest
+from scrapy.http import FormRequest,Request
 from scrapy.selector.lxmlsel import HtmlXPathSelector
 from scrapy.selector import Selector
 from scrapy.http import HtmlResponse
@@ -9,7 +9,7 @@ from dateutil.parser import parse as dateParse
 import re
 import itertools, collections
 import logging 
-
+from urlparse import urljoin
 
 class Util(object):
 	@classmethod
@@ -64,13 +64,17 @@ class SWAFareSpider(Spider):
 	'MSP', 'CAK', 'TPA', 'DAL', 'DAY', 'ONT', 'STL', 'ABQ', 'HOU', 'SLC', 
 	'MCO', 'RSW', 'BHM', 'MCI', 'PNS', 'LGA', 'AMA', 'SDF', 'PWM']
 	
-	def __init__(self, fromCity=None, date=None, toCity=None, *args, **kwargs):
+	def __init__(self, fromCity=None, days=None, toCity=None, startDate=None, *args, **kwargs):
 		super(SWAFareSpider, self).__init__(**kwargs)
 		self.origin = fromCity
-		if isinstance(date, datetime):
-			self.outDate = date
+		self.days = int(days)
+		self.daysSearched = 0
+		if startDate == None:
+			self.currentDate = datetime.now() + timedelta(days=1)
+		elif type(startDate) == str:
+			self.currentDate = dateParse(startDate)
 		else:
-			self.outDate = dateParse(date)
+			self.currentDate = startDate
 		self.destination = toCity
 
 	@classmethod
@@ -80,7 +84,6 @@ class SWAFareSpider(Spider):
 		else:
 			raise Exception("Invalid city specified.")	
 
-			
 	def buildQuery(self):
 		"""Build the POST query string for searching flights."""
 		queryData = {}
@@ -90,18 +93,22 @@ class SWAFareSpider(Spider):
 		queryData["fareType"] = "POINTS"
 		queryData["originAirport"] = self.lookupCity(self.origin)
 		queryData["destinationAirport"] = self.lookupCity(self.destination)
-		queryData["outboundDateString"] = self.outDate.strftime("%m/%d/%Y")
+		queryData["outboundDateString"] = self.currentDate.strftime("%m/%d/%Y")
 		queryData["returnAirport"] = ""
 		return queryData
 		
 	def parse(self, response):	
 		queryData = self.buildQuery()
-		return [FormRequest.from_response(response, formdata=queryData, formname=self.FORMNAME, callback=self.scrapeFlights)]
+		while (self.daysSearched < self.days):
+			yield FormRequest.from_response(response, formdata=queryData, formname=self.FORMNAME, callback=self.scrapeFlights, 
+				dont_filter = True, meta = {'date' : self.currentDate})
+			self.daysSearched = self.daysSearched + 1
+			self.currentDate = self.currentDate + timedelta(days=1)
+			queryData["outboundDateString"] = self.currentDate.strftime("%m/%d/%Y")
 
 	def scrapeFlights(self, response):
 		"""Scrape the flights into a Fare() object."""
 		htmlSelector = Selector(response = response)
-
 		errors = htmlSelector.xpath("//ul[@id='errors']/li/text()").extract()
 		if (len(errors) > 0 ):
 			if "does not offer service" in errors[0]: 
@@ -139,16 +146,16 @@ class SWAFareSpider(Spider):
 			for flightIndex in range(len(fareList[fareTypeIndex])):
 				flightString = fareList[fareTypeIndex][flightIndex]
 				if ( flightString[0] == 'D' ):
-					flightData = Util.parseFlight(flightString, self.outDate.date(), pointsList[fareTypeIndex][flightIndex])
+					flightData = Util.parseFlight(flightString, response.meta['date'], pointsList[fareTypeIndex][flightIndex])
 					flight = Fare()		
 					for	key in flightData:
 						flight[key] = flightData[key]
 					flight['origin'] = self.origin
 					flight['destination'] = self.destination
-					flight['date'] = self.outDate
 					flight['faretype'] = fareType[fareTypeIndex]
 					allFlights.append(flight)
 		
+
 		for flightIndex in range(len(allFlights)):
 			flight = allFlights[flightIndex]
 			if flight in allFlights[flightIndex+1:]:
