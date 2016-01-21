@@ -36,8 +36,6 @@ class BookedFlight():
 		#Returns current cost if cheaper, otherwise returns False
 		fares = self.getFareHistory()
 		mostRecentFare = fares[0]
-		if (mostRecentFare['fareValidityDate'] < (datetime.now() - timedelta(days = 1))):
-			runUserFlights([self])
 		fares = self.getFareHistory(False)
 		mostRecentFare = fares[0]
 		print(fareString(mostRecentFare))
@@ -62,7 +60,7 @@ if __name__ == '__main__':
 	#flights.append(BookedFlight('OAK',"04/15/2016",'BZE',1731,11000,True))
 	#flights.append(BookedFlight('BZE',"04/15/2016",'OAK',1023,11000,True))
 	#download fares
-	#runUserFlights(flights)
+	runUserFlights(flights)
 	#grab prices from DB and compare
 	for flight in flights: 
 		flight.checkCurrentCost()
