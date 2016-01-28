@@ -1,2 +1,16 @@
-Do not add repetitive entries
+#Displaying user flights:
+-Javascript backend: when user signs in, fetch the fares for his flights and display that info
+-Python backend: convert checkUserFares.py to get user Fares from mongo db and scrape prices. Then cron to run.
+
+#Many Fare Scraping
+-debug dynamo db memory error 
+-re-enable daily cron 
+-maybe: transfer old mongo to new dynamo (only one weeks worth of data)
+
+#Auto Check in
+
+
+#Search
+
+
 
