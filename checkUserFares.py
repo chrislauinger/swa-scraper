@@ -5,11 +5,13 @@ from datetime import datetime, timedelta
 import swa.settings as settings
 from swa.items import *
 
+POINTS_FEE = 5.60
 
 def fareString(fare):
-	return "%s -> %s on %s at %s for $%s or %s points" % (fare['origin'], fare['destination'], 
+	point_ratio =  100 * (fare['price'] - POINTS_FEE) / fare['points']
+	return "%s -> %s on %s at %s for $%s or %s points (%s)" % (fare['origin'], fare['destination'], 
 		fare['depart'].strftime("%m/%d/%Y"), fare['depart'].strftime("%H:%M"), str(fare['price']),
-		str(fare['points']))
+		str(fare['points']), str(round(point_ratio,2)))
 
 class BookedFlight():
 	def __init__(self, origin, date, destination, flightNumber, cost, usingPoints = False):

@@ -24,11 +24,11 @@ class Util(object):
 		stops = int(infoList[4]) if infoList[4] != 'Non' else 0	
 		
 		if stops == 0:
-			connectingArpts = None
+			connectingArpts = []
 		elif ( infoList[5] not in SWAFareSpider.cities):
-			connectingArpts = None
+			connectingArpts = []
 		else:
-			connectingArpts = tuple(infoList[5].split('/'))
+			connectingArpts = list(infoList[5].split('/'))
 		
 		departureDT = dateParse("%s %s" % (date, infoList[2]) )
 		arrivalDT = dateParse("%s %s" % (date, infoList[3]) )

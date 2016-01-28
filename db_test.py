@@ -10,10 +10,14 @@ def checkDB(timedelta):
 	client = pymongo.MongoClient(settings.MONGODB_SERVER, settings.MONGODB_PORT)
 	db = client[settings.MONGODB_DB]
 	start = datetime.now() - timedelta
+	total = 0
 	print("Fare count back %s days" % timedelta.days)
 	for pair in getCityPairs():
 		combo = '%s_%s' % (pair[0], pair[1])
-		print(combo + " " + str(db[combo].find({'fareValidityDate': {'$gte': start}}).count()))
+		count = db[combo].find({'fareValidityDate': {'$gte': start}}).count()
+		total = total + count
+		print(combo + " " + str(count))
+	print("total " + str(total))
 
 if __name__ == '__main__':
-	checkDB(timedelta(days=1))
+	checkDB(timedelta(days=10))
