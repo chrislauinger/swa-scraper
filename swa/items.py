@@ -11,12 +11,13 @@ class Fare(Item):
 	flight = Field()
 	arrive = Field()
 	depart = Field()
+	depart_date = Field()
 	faretype = Field()
 	price = Field()
 	points = Field()
 	stops = Field()
-	connectingArpts = Field()
-	fareValidityDate = Field() 
+	connecting_arpts = Field()
+	fare_validity_date = Field() 
 
 	def __eq__(self, other):
 		if isinstance(other, self.__class__):

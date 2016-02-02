@@ -1,6 +1,7 @@
 import pymongo
 import boto3
 from datetime import datetime, timedelta
+from helpers import *
 import time
 
 TABLE_NAME = 'fares'
@@ -66,10 +67,12 @@ class DynamoPipeline(object):
         itemDict = dict(item)
         itemDict['arrive'] = toMsEpoch(itemDict['arrive'])
         itemDict['depart'] = toMsEpoch(itemDict['depart'])
-        itemDict['fareValidityDate'] = toMsEpoch(itemDict['fareValidityDate'])
+        itemDict['fare_validity_date'] = toMsEpoch(itemDict['fare_validity_date'])
         itemDict['route'] = itemDict['origin'] + "_" + itemDict['destination']
-        itemDict['sort_key'] = str(itemDict['depart']) + "_" + str(itemDict['fareValidityDate'])
+        itemDict['sort_key'] = str(itemDict['depart']) + "_" + str(itemDict['fare_validity_date'])
         itemDict['flight'] = int(itemDict['flight'][0])
+        itemDict['flight_key'] = itemDict['route'] + "_" + str(toMsEpoch(itemDict['depart_date'])) + "_" + str(itemDict['flight'])
+        del itemDict['depart_date']
         self.table.put_item(Item= itemDict)
         return item
 

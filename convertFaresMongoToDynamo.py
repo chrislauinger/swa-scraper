@@ -1,5 +1,6 @@
 from itertools import permutations
 from scraper import * 
+from helpers import * 
 import swa.settings as settings
 from datetime import datetime, timedelta
 import pymongo
@@ -13,15 +14,7 @@ AWS_URL = 'https://dynamodb.us-west-2.amazonaws.com'
 
 #script to move fare data from mongo db to dynamo db
 
-def toMsEpoch(date):
-	tt = datetime.timetuple(date)
-	sec_epoch_loc = int(time.mktime(tt) * 1000)
-	return sec_epoch_loc
 
-def fromMsEpoch(ms):
-	s = ms / 1000.0
-	date = datetime.fromtimestamp(s)
-	return date
 
 class Fare():
 	def __init__(self, mongoDict):

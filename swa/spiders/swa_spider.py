@@ -24,11 +24,11 @@ class Util(object):
 		stops = int(infoList[4]) if infoList[4] != 'Non' else 0	
 		
 		if stops == 0:
-			connectingArpts = []
+			connecting_arpts = []
 		elif ( infoList[5] not in SWAFareSpider.cities):
-			connectingArpts = []
+			connecting_arpts = []
 		else:
-			connectingArpts = list(infoList[5].split('/'))
+			connecting_arpts = list(infoList[5].split('/'))
 		
 		departureDT = dateParse("%s %s" % (date, infoList[2]) )
 		arrivalDT = dateParse("%s %s" % (date, infoList[3]) )
@@ -39,9 +39,10 @@ class Util(object):
 			'price': int(infoList[1][1:].replace(",","")),
 			'depart': departureDT,
 			'arrive': arrivalDT,
+			'depart_date' : date,
 			'stops': stops,
-			'connectingArpts': connectingArpts,
-			'fareValidityDate': datetime.now(), 
+			'connecting_arpts': connecting_arpts,
+			'fare_validity_date': datetime.now(), 
 			'points' : int(points.replace(",",""))
 		}
 		return flight
@@ -71,6 +72,7 @@ class SWAFareSpider(Spider):
 		self.daysSearched = 0
 		if startDate == None:
 			self.currentDate = datetime.now() + timedelta(days=1)
+			self.currentDate =  self.currentDate.replace(hour=0, minute=0, second=0, microsecond=0)
 		elif type(startDate) == str:
 			self.currentDate = dateParse(startDate)
 		else:
@@ -146,6 +148,7 @@ class SWAFareSpider(Spider):
 			for flightIndex in range(len(fareList[fareTypeIndex])):
 				flightString = fareList[fareTypeIndex][flightIndex]
 				if ( flightString[0] == 'D' ):
+					logging.debug(flightString)
 					flightData = Util.parseFlight(flightString, response.meta['date'], pointsList[fareTypeIndex][flightIndex])
 					flight = Fare()		
 					for	key in flightData:

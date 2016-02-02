@@ -16,7 +16,7 @@ import time
 
 
 CITIES =  ['SEA','BWI','SAN','MDW','DEN','HOU','LAX','SFO','OAK','PDX']
-#CITIES = ['DEN','OAK']
+CITIES = ['DEN','OAK']
 def getCityPairs():
 	return permutations(CITIES,2)
 
@@ -42,7 +42,7 @@ def runAllCities(cityPairs, days):
 	print("crawl time: " + str(time.time() - a))
 
 if __name__ == '__main__':
-	days = 180
+	days = 1
 	runAllCities(getCityPairs(), days)
 	#takes about 2 hours to run 90 routes for 180 days 
 	#TODO: use multiple reactor runs to run more than 90 routes (times out with too many spiders in one run)
