@@ -1,6 +1,8 @@
 #Displaying user flights:
+-javascript + python: make flight key for userBookedFlight and Fare that identifies a flight (date + flight number + route) 
 -Javascript backend: when user signs in, fetch the fares for his flights and display that info
 -Python backend: convert checkUserFares.py to get user Fares from mongo db and scrape prices. Then cron to run.
+-Javascript backend: live edit user booked flights? 
 
 #Many Fare Scraping
 -debug dynamo db memory error 
