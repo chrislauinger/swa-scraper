@@ -16,7 +16,6 @@ class UserFlight():
 		self.username = item['username']
 		self.origin = item['origin'] 
 		self.date = fromMsEpoch(int(item['date']))
-		print(self.date)
 		self.destination = item['destination']
 		self.flightNumber = item['flight_number']
 		self.cost = item['cost']

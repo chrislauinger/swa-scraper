@@ -1,11 +1,16 @@
 #Displaying user flights:
--Javascript backend: when user signs in, fetch the fares for his flights and display that info
 -Python backend: Cron to run runUserFares.py
 -Javascript backend: live edit user booked flights? 
 
 --cleanup: move all db funcitonality into a folder, move functions to helpers, document each file/function, move constants into a single file 
+cleanup charts
+order userFlights by Date
+
+//known bugs:
+if user flight is added, but there are no fares yet, crashes
 
 #Many Fare Scraping
+
 -debug dynamo db memory error 
 -re-enable daily cron 
 -maybe: transfer old mongo to new dynamo (only one weeks worth of data)
