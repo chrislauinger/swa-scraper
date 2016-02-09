@@ -5,6 +5,7 @@ import swa.settings as settings
 from datetime import datetime, timedelta
 
 #TODO: cron script to run after daily scrape
+
 def checkDB(timedelta):
 	#prints number of fares found in DB withing timedelta for each route
 	client = pymongo.MongoClient(settings.MONGODB_SERVER, settings.MONGODB_PORT)

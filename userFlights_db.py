@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from helpers import * 
 
 import boto3
-from boto3.dynamodb.conditions import Key, Attr
+from boto3.dynamodb.conditions import Key, Attr 
 
 TABLE_NAME = 'userFlights'
 REGION = 'us-west-2'
@@ -20,10 +20,32 @@ class UserFlight():
 		self.flightNumber = item['flight_number']
 		self.cost = item['cost']
 		self.usingPoints = item['using_points']
+		self.flightKey = item['flight_key']
+		self.route = self.origin + "_" + self.destination
+		self.fareHistory = []
 
 	def __str__(self):
-		return "%s: %s -> %s on %s. Cost: %s%s %s. #%s." % (self.username, self.origin, self.destination, self.date.strftime("%m/%d/%Y"), 
-			"$" if not self.usingPoints else "", self.cost, "points" if self.usingPoints else "", self.flightNumber) 
+		return "%s -> %s on %s. Paid: %s. #%s." % (self.origin, self.destination, self.date.strftime("%m/%d/%Y"), 
+			costString(self.cost, self.usingPoints), self.flightNumber)
+
+	def basicStr(self):
+		return "%s -> %s on %s" % (self.origin, self.destination, self.date.strftime("%m/%d/%Y")) 
+
+	def addFares(self, fares):
+		for fare in fares:
+			self.fareHistory.append(fare)
+
+	def checkRefund(self):
+		#returns False for no Refund and a String if there is
+		if (len(self.fareHistory) == 0):
+			return False
+		latestFare = self.fareHistory[-1]
+		print(latestFare)
+		currentCost = latestFare.points if self.usingPoints else latestFare.price
+		if (currentCost < self.cost):
+			return "Refund Found! The current cost is %s as of %s" % (costString(currentCost,self.usingPoints), latestFare.fare_validity_date.strftime("%m/%d/%Y")) + "\nFlight info: " + str(self)
+		else:
+			return False
 
 def dynamoResponseToObjects(response):
 	flights = []

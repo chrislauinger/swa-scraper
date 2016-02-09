@@ -1,13 +1,13 @@
 #Displaying user flights:
--Python backend: Cron to run runUserFares.py
 -Javascript backend: live edit user booked flights? 
 
 --cleanup: move all db funcitonality into a folder, move functions to helpers, document each file/function, move constants into a single file 
 cleanup charts
-order userFlights by Date
+--Python backend: email user if there is a refund - 
+ -- get correct email for the user
+ 
 
-//known bugs:
-if user flight is added, but there are no fares yet, crashes
+--make bookedFlights update every hour? 
 
 #Many Fare Scraping
 
