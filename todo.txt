@@ -3,9 +3,6 @@
 
 --cleanup: move all db funcitonality into a folder, move functions to helpers, document each file/function, move constants into a single file 
 cleanup charts
---Python backend: email user if there is a refund - 
- -- get correct email for the user
- 
 
 --make bookedFlights update every hour? 
 
@@ -19,6 +16,16 @@ cleanup charts
 
 
 #Search
+
+
+Setting up ec2 instance:
+sudo yum install emacs
+ sudo yum install make
+ sudo yum install libffi-devel
+ sudo yum install gcc
+ sudo yum install openssl-devel
+ sudo yum install -y gcc libxml2 libxml2-devel libxslt libxslt-devel
+ sudo pip install scrapy
 
 
 

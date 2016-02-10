@@ -1,5 +1,4 @@
 from scraper import runUserFlights
-import pymongo
 from dateutil.parser import parse as dateParse
 from datetime import datetime, timedelta
 import swa.settings as settings

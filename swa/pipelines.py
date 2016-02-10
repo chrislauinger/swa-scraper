@@ -1,4 +1,3 @@
-import pymongo
 import boto3
 from datetime import datetime, timedelta
 from helpers import *
@@ -14,6 +13,7 @@ def toMsEpoch(date):
     return sec_epoch_loc
 
 
+'''
 class MongoPipeline(object):
 
     def __init__(self, mongo_server, mongo_port, mongo_db):
@@ -40,6 +40,7 @@ class MongoPipeline(object):
     	collection = spider.origin + "_" + spider.destination
         self.db[collection].insert(dict(item))
         return item
+'''
 
 class DynamoPipeline(object):
 

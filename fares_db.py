@@ -1,4 +1,3 @@
-import pymongo
 from itertools import permutations
 from scraper import * 
 import swa.settings as settings
