@@ -122,15 +122,15 @@ class SWAFareSpider(Spider):
 		# Conveniently packaged flight info in string form for form submission
 		subpath = '//div[@class="productPricing"]//input/@title'
 		selectors = [ 
-			'//table[@id="faresOutbound"]//td[@class="price_column "]' + subpath,   # business select
-			'//table[@id="faresOutbound"]//td[@class="price_column"][1]' + subpath, # anytime
-			'//table[@id="faresOutbound"]//td[@class="price_column"][2]' + subpath  # wanna get away
+			'//table[@id="faresOutbound"]//td[@class="price_column "]//div[@class="productPricing"]//input/@title' ,   # business select
+			'//table[@id="faresOutbound"]//td[@class="price_column"]//div[@class="productPricing"]//input[contains(@id,"B")]/@title', # anytime
+			'//table[@id="faresOutbound"]//td[@class="price_column"]//div[@class="productPricing"]//input[contains(@id,"C")]/@title'  # wanna get away
 			]
 		points_path = '//div[@class="productPricing"]//label/text()'
 		points_selectors = [
 			'//table[@id="faresOutbound"]//td[@class="price_column "]' + points_path ,   # business select points
-			'//table[@id="faresOutbound"]//td[@class="price_column"][1]' + points_path, # anytime
-			'//table[@id="faresOutbound"]//td[@class="price_column"][2]' + points_path  # wanna get away	
+			'//table[@id="faresOutbound"]//td[@class="price_column"]//div[@class="productPricing" and .//input[(contains(@id,"B")) and (@name="outboundTrip")]]//label/text()', # anytime
+			'//table[@id="faresOutbound"]//td[@class="price_column"]//div[@class="productPricing" and .//input[(contains(@id,"C")) and (@name="outboundTrip")]]//label/text()' # wanna get away
 		]
 		fareList = []
 		pointsList = []
