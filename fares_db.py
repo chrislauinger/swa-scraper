@@ -52,11 +52,9 @@ def checkForRefunds():
 		print(flight)
 		fares = getFaresForFlight(flight)
 		flight.addFares(fares)
-		for fare in fares:
-			print(fare.detailedString())
 		refund = flight.checkRefund() 
 		if refund:
-			#sendEmail(getUser(flight.username).email, 'Southwest Refund Found: ' + flight.basicStr(), refund)
+			sendEmail(getUser(flight.username).email, 'Southwest Refund Found: ' + flight.basicStr(), refund)
 			#email
 			print(refund)
 
