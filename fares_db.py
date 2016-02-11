@@ -37,13 +37,16 @@ def dynamoResponseToObjects(response):
 	fares = []
 	for item in response['Items']:
 		fares.append(Fare(item))
+	
 	return fares
 
 def getFaresForFlight(userFlight):
 	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
 	response = table.query(KeyConditionExpression=Key('route').eq(userFlight.route),
 		FilterExpression=Key('flight_key').eq(userFlight.flightKey))
-	return dynamoResponseToObjects(response)
+	fares = dynamoResponseToObjects(response)
+	fares.sort(key=lambda x: x.fare_validity_date, reverse=False) #todo: dynamodb should return query in sorted order but not working? 
+	return fares
 
 
 def checkForRefunds():
@@ -52,6 +55,8 @@ def checkForRefunds():
 		print(flight)
 		fares = getFaresForFlight(flight)
 		flight.addFares(fares)
+		for fare in fares:
+			print(fare)
 		refund = flight.checkRefund() 
 		if refund:
 			sendEmail(getUser(flight.username).email, 'Southwest Refund Found: ' + flight.basicStr(), refund)
