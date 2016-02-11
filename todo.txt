@@ -6,7 +6,15 @@ cleanup charts
 
 --make bookedFlights update every hour? 
 
+Linux todo: 
+Check timestamps getting placed in DB 
+Get Pipeline working w/ AWS creds 
+
 #Many Fare Scraping
+
+#bugs:
+on lunux: 
+--run user fares: don't run old dates
 
 -debug dynamo db memory error 
 -re-enable daily cron 
@@ -18,7 +26,9 @@ cleanup charts
 #Search
 
 
+
 Setting up ec2 instance:
+sudo yum install git
 sudo yum install emacs
  sudo yum install make
  sudo yum install libffi-devel
@@ -26,6 +36,10 @@ sudo yum install emacs
  sudo yum install openssl-devel
  sudo yum install -y gcc libxml2 libxml2-devel libxslt libxslt-devel
  sudo pip install scrapy
+ sudo pip install boto3
+ git clone https://github.com/chrislauinger/swa-scraper.git
+
+ copy private file
 
 
 

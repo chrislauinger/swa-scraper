@@ -30,6 +30,9 @@ class Fare():
 		return "%s points or $%s at %s" % (self.points, self.price, self.fare_validity_date) 
 
 
+	def detailedString(self):
+		return self.sort_key
+
 def dynamoResponseToObjects(response):
 	fares = []
 	for item in response['Items']:
@@ -49,13 +52,20 @@ def checkForRefunds():
 		print(flight)
 		fares = getFaresForFlight(flight)
 		flight.addFares(fares)
+		for fare in fares:
+			print(fare.detailedString())
 		refund = flight.checkRefund() 
 		if refund:
-			sendEmail(getUser(flight.username).email, 'Southwest Refund Found: ' + flight.basicStr(), refund)
+			#sendEmail(getUser(flight.username).email, 'Southwest Refund Found: ' + flight.basicStr(), refund)
 			#email
 			print(refund)
 
+def checkAllFares():
+	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
+	response = table.scan()
+	print len(response['Items'])
+
 
 if __name__ == '__main__':
-	checkForRefunds()
+	checkAllFares()
 	
