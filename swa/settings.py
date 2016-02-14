@@ -32,13 +32,6 @@ USER_AGENT = " "
 
 ITEM_PIPELINES = {'swa.pipelines.DynamoPipeline' : 100 } 
 
-#mongo db settings
-MONGODB_SERVER = "localhost"
-MONGODB_PORT = 27017
-MONGODB_DB = "fares"
-#MONGODB_COLLECTION = "" 
-#collections are names using origin city then destination city code (ex: OAK_LAX)
-
 #dynamo db settings
 DYNAMO_TABLE_NAME = 'fares'
 AWS_REGION = 'us-west-2'
