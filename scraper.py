@@ -2,8 +2,9 @@ from swa import *
 from swa.spiders.swa_spider import *
 import swa.settings
 
-from twisted.internet import reactor
+from twisted.internet import reactor, defer
 from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerRunner
 from scrapy.settings import Settings
 from scrapy.utils.project import get_project_settings
 
@@ -16,7 +17,7 @@ import time
 
 
 CITIES =  ['SEA','BWI','SAN','MDW','DEN','HOU','LAX','SFO','OAK','PDX']
-CITIES = ['DEN','OAK']
+#CITIES = ['PVD','BWI']
 def getCityPairs():
 	return permutations(CITIES,2)
 
@@ -41,9 +42,21 @@ def runAllCities(cityPairs, days):
 	reactor.run() # the script will block here until all crawling jobs are finished
 	print("crawl time: " + str(time.time() - a))
 
+
+
+def runAllCitiesSeq(cityPairs, days):
+	a = time.time()
+	runner = CrawlerRunner(get_project_settings())
+
+	@defer.inlineCallbacks
+	def crawl():
+		for pair in cityPairs:
+			yield runner.crawl(SWAFareSpider, fromCity = pair[0], days = days, toCity = pair[1])
+   		reactor.stop()
+	crawl()
+	reactor.run() # the script will block here until the last crawl call is finished
+	print("crawl time: " + str(time.time() - a))
+
 if __name__ == '__main__':
-	days = 1
-	runAllCities(getCityPairs(), days)
-	#takes about 2 hours to run 90 routes for 180 days 
-	#TODO: use multiple reactor runs to run more than 90 routes (times out with too many spiders in one run)
-	#TODO: memory error writing into DynamoDb with 90 routes for 180 days
+	days = 180
+	runAllCitiesSeq(getCityPairs(), days)

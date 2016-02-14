@@ -6,19 +6,23 @@ cleanup charts
 
 --make bookedFlights update every hour? 
 
-Linux todo: 
-Check timestamps getting placed in DB 
-Get Pipeline working w/ AWS creds 
+--add refresh button to plots. What todo if one gets stuck? 
+
+Linux todo:  
 
 #Many Fare Scraping
 
 #bugs:
 on lunux: 
---run user fares: don't run old dates
 
 -debug dynamo db memory error 
--re-enable daily cron 
--maybe: transfer old mongo to new dynamo (only one weeks worth of data)
+
+Email system:
+Once A Refund is Found: Set a Flag that says the email has been sent out. And Save the refund amount. If refund goes away, send another email saying it gone and unset refund flag. 
+
+Run Fare when user adds a new booked flight: Ajax call to python
+
+
 
 #Auto Check in
 
@@ -40,6 +44,8 @@ sudo yum install emacs
  git clone https://github.com/chrislauinger/swa-scraper.git
 
  copy private file
+
+ copy aws credentials into /home/ec2-user/.aws/credentials
 
 
 
