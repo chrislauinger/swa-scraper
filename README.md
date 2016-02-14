@@ -1,22 +1,18 @@
-This is a spider for use with [Scrapy](http://www.scrapy.org) that crawls for and parses fares for one-way flights on Southwest's website. 
+This is a spider for use with [Scrapy](http://www.scrapy.org) that crawls for and parses fares for one-way flights on Southwest's website and puts the fares in an AWS Dynamo DB
 
-# Usage
-Install Scrapy and run from the command line:
+Setup after cloning repo on linux EC2 instance: 
+sudo yum install git
+sudo yum install emacs
+sudo yum install make
+sudo yum install libffi-devel
+sudo yum install gcc
+sudo yum install openssl-devel
+sudo yum install -y gcc libxml2 libxml2-devel libxslt libxslt-devel
+sudo pip install scrapy
+sudo pip install boto3
 
-	scrapy crawl southwestFare -a fromCity=ABC -a toCity=DEF -a days=2 -o output.json -t json 
-	
-start data base:
-mongod --storageEngine=mmapv1 --dbpath C:/DB
+copy aws credentials into /home/ec2-user/.aws/credentials
 
-#AWS credientials found locally:
-/home/chris/.aws/credentials
-
-# Disclaimer
-As with any site scraper, this can break. At any moment. If Southwest tweaks their page layout, things might go astray. If you want to tweak anything, a good place to start would be the information selection XPath in `swa/spiders/swa_spider.py`.
-
-#Data info:
-Timestamps converted to UTC: 
-the date of the flight in fares and userFlights are set to midnight UTC.
-
-The fares are in UTC epoch time, but correspond to local time for the flight.  
-For exmaple, to get the depart time of the flight, convert UTC epoch timestamp to date object and display UTC date object. 
+create privateConstants.py:
+author =  ''
+password = ''

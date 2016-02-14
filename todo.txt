@@ -1,27 +1,14 @@
-#Displaying user flights:
 -Javascript backend: live edit user booked flights? 
 
 --cleanup: move all db funcitonality into a folder, move functions to helpers, document each file/function, move constants into a single file 
 cleanup charts
-
---make bookedFlights update every hour? 
-
---add refresh button to plots. What todo if one gets stuck? 
-
-Linux todo:  
-
-#Many Fare Scraping
-
-#bugs:
-on lunux: 
-
--debug dynamo db memory error 
 
 Email system:
 Once A Refund is Found: Set a Flag that says the email has been sent out. And Save the refund amount. If refund goes away, send another email saying it gone and unset refund flag. 
 
 Run Fare when user adds a new booked flight: Ajax call to python
 
+# UI - make clear that it's one way fares. Input first flight number 
 
 
 #Auto Check in
@@ -29,23 +16,9 @@ Run Fare when user adds a new booked flight: Ajax call to python
 
 #Search
 
+#Analysis:
+Once have enough data, do research on points/dollar ratios, etc
 
-
-Setting up ec2 instance:
-sudo yum install git
-sudo yum install emacs
- sudo yum install make
- sudo yum install libffi-devel
- sudo yum install gcc
- sudo yum install openssl-devel
- sudo yum install -y gcc libxml2 libxml2-devel libxslt libxslt-devel
- sudo pip install scrapy
- sudo pip install boto3
- git clone https://github.com/chrislauinger/swa-scraper.git
-
- copy private file
-
- copy aws credentials into /home/ec2-user/.aws/credentials
 
 
 
