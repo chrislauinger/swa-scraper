@@ -1,15 +1,12 @@
--Javascript backend: live edit user booked flights? 
+Todo:
+live edit user booked flights
+Booked FLight DElete - add toggle 
+Add confirmation number so we can do auto-checkIn 
+Form validation: display error when Airport Codes Are Wrong
+Add password to username? 
 
---cleanup: move all db funcitonality into a folder, move functions to helpers, document each file/function, move constants into a single file 
-cleanup charts
 
-Email system:
-Once A Refund is Found: Set a Flag that says the email has been sent out. And Save the refund amount. If refund goes away, send another email saying it gone and unset refund flag. 
-
-Run Fare when user adds a new booked flight: Ajax call to python
-
-# UI - make clear that it's one way fares. Input first flight number 
-
+Analyze phone mode
 
 #Auto Check in
 

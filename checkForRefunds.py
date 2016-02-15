@@ -1,4 +1,4 @@
-from fares_db import * 
+from userFlights_db import * 
 
 if __name__ == '__main__':
 	checkForRefunds()
