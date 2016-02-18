@@ -26,7 +26,7 @@ def sendEmail(to, subject, message):
 
 	msg = MIMEText(message)
 	msg['To'] = email.utils.formataddr(('Recipient', to))
-	msg['From'] = email.utils.formataddr(('Dragon Fare Scanner', author))
+	msg['From'] = email.utils.formataddr(('Dragon', author))
 	msg['Subject'] = subject
 
 	try:
