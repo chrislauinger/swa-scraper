@@ -1,20 +1,27 @@
 Todo:
-live edit user booked flights
-Booked FLight DElete - add toggle 
-Add confirmation number so we can do auto-checkIn 
-Form validation: display error when Airport Codes Are Wrong
-Add password to username? 
+Get real domain name and DNS service: amazon cost: $11/year for queries and 1 hosted zone, $12/year for .com domain 
+Fix DB scan to count number of fares in last 24 hours + email at Noon
+Share with friends 
+Optimize website hits? 
+User stats displayed on webpage
+remember meta data
 
 
-Analyze phone mode
 
 #Auto Check in
+https://www.southwest.com/flight/retrieveCheckinDoc.html?forceNewSession=yes
+Add confirmation number so we can do auto-checkIn 
 
 
 #Search
 
 #Analysis:
 Once have enough data, do research on points/dollar ratios, etc
+
+Move code to private repo? 
+Internnational: different source code format
+Email other bloggers to get links to my site
+
 
 
 
