@@ -39,3 +39,4 @@ def sendEmail(to, subject, message):
 		print 'successfully sent the mail'
 	except Exception as e:
 		print 'fail to send mail'
+		print(e)

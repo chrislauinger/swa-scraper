@@ -1,11 +1,15 @@
 Todo:
-Get real domain name and DNS service: amazon cost: $11/year for queries and 1 hosted zone, $12/year for .com domain 
+User report
 Fix DB scan to count number of fares in last 24 hours + email at Noon
-Share with friends 
 Optimize website hits? 
 User stats displayed on webpage
 remember meta data
+Ajax call to python runUserFares
 
+From feedback:
+Password
+Smaller Delete / Clear Form Button 
+Home screen says something like logout
 
 
 #Auto Check in

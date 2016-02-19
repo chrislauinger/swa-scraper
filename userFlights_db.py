@@ -87,6 +87,8 @@ def checkForRefunds():
 				print(refund)
 				flight.sentEmail = True
 				putUserFlight(flight)
+			else:
+				print('Refund found, but already sent email')
 		elif not refund and flight.sentEmail:
 			flight.sentEmail = False
 			putUserFlight(flight)
