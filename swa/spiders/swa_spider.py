@@ -32,7 +32,7 @@ class Util(object):
 		
 		departureDT = dateParse("%s %s" % (date, infoList[2]) )
 		arrivalDT = dateParse("%s %s" % (date, infoList[3]) )
-		if ( arrivalDT < departureDT ): departureDT += timedelta(days=1)
+		if ( arrivalDT < departureDT ): arrivalDT += timedelta(days=1)
 		
 		flight = {
 			'flight': tuple(infoList[0].split('/')),

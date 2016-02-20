@@ -5,11 +5,19 @@ Optimize website hits?
 User stats displayed on webpage
 remember meta data
 Ajax call to python runUserFares
+Convert to upercase
+Create table called UserFares that only holds fares for the user? --> somehoe create cache? 
+queries: if scan > 5k items, will not get everything (currently a 2 days range)
 
 From feedback:
 Password
 Smaller Delete / Clear Form Button 
 Home screen says something like logout
+Add flight: note that all fields are required 
+More input validation: if I can't submit, then you must tell exactly what fields to fix
+Timezone of plots to time of flight  
+
+FAQ's section
 
 
 #Auto Check in

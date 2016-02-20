@@ -97,3 +97,6 @@ if __name__ == '__main__':
 	flights = getAllFlights()
 	for flight in flights:
 		print(flight)
+		fares = getFaresForFlight(flight)
+		for fare in fares:
+			print(fare)

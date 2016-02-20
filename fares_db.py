@@ -42,7 +42,9 @@ def dynamoResponseToObjects(response):
 
 def getFaresForFlight(userFlight):
 	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
-	response = table.query(KeyConditionExpression=Key('route').eq(userFlight.route),
+	dateLowerBound = toMsEpoch(userFlight.date)
+	dateUpperBound = toMsEpoch(userFlight.date + timedelta(days=2)) #depart dates were wrong, adding a day to departure if arrival was past midnight (depart time used in sort_key)
+	response = table.query(KeyConditionExpression=Key('route').eq(userFlight.route) & Key('sort_key').between(str(dateLowerBound),str(dateUpperBound)),
 		FilterExpression=Key('flight_key').eq(userFlight.flightKey))
 	fares = dynamoResponseToObjects(response)
 	fares.sort(key=lambda x: x.fare_validity_date, reverse=False) #todo: dynamodb should return query in sorted order but not working? 
