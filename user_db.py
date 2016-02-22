@@ -33,5 +33,9 @@ def getAllUsernames():
 	response = table.scan(AttributesToGet=['username'])
 	return dynamoResponseToObjects(response)
 
+def countUsers():
+	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
+	return table.item_count
+
 if __name__ == '__main__':
 	print(getAllUsernames())

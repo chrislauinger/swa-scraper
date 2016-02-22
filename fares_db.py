@@ -50,12 +50,11 @@ def getFaresForFlight(userFlight):
 	fares.sort(key=lambda x: x.fare_validity_date, reverse=False) #todo: dynamodb should return query in sorted order but not working? 
 	return fares
 
-def checkAllFares():
-	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
-	response = table.scan()
-	print len(response['Items'])
 
+def countFares():
+	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
+	return table.item_count
 
 if __name__ == '__main__':
-	checkAllFares()
+	countFares()
 	

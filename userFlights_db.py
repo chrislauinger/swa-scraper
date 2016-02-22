@@ -93,6 +93,10 @@ def checkForRefunds():
 			flight.sentEmail = False
 			putUserFlight(flight)
 
+def countUserFlights():
+	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
+	return table.item_count
+
 if __name__ == '__main__':
 	flights = getAllFlights()
 	for flight in flights:
