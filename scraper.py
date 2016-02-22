@@ -26,6 +26,7 @@ def runUserFlights(userFlights):
 	process = CrawlerProcess(get_project_settings())
 	for flight in userFlights:
 		if flight.date > datetime.now(): #check in timezone of flight..
+			print(flight)
 			process.crawl(SWAFareSpider, fromCity = flight.origin, days = 1, toCity = flight.destination, startDate = flight.date)		
 	d = process.join()
 	d.addBoth(lambda _: reactor.stop())

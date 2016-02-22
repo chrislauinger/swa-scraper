@@ -45,7 +45,6 @@ class UserFlight():
 		if (len(self.fareHistory) == 0):
 			return False
 		latestFare = self.fareHistory[-1]
-		print(latestFare)
 		currentCost = latestFare.points if self.usingPoints else latestFare.price
 		if (currentCost < self.cost):
 			return "Refund Found! The current cost is %s as of %s" % (costString(currentCost,self.usingPoints), latestFare.fare_validity_date.strftime("%m/%d/%Y")) + "\nFlight info: " + str(self)
@@ -77,7 +76,6 @@ def getAllFlights():
 def checkForRefunds():
 	flights = getAllFlights()
 	for flight in flights:
-		print(flight)
 		fares = getFaresForFlight(flight)
 		flight.addFares(fares)
 		refund = flight.checkRefund() 
@@ -88,8 +86,9 @@ def checkForRefunds():
 				flight.sentEmail = True
 				putUserFlight(flight)
 			else:
-				print('Refund found, but already sent email')
+				print(str(flight) + '-- Refund found, but already sent email')
 		elif not refund and flight.sentEmail:
+			print(str(flight) + "-- Resetting")
 			flight.sentEmail = False
 			putUserFlight(flight)
 
