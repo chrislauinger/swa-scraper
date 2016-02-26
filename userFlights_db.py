@@ -30,8 +30,7 @@ class UserFlight():
 			self.sentEmail = item['sent_email']
 
 	def __str__(self):
-		return "%s -> %s on %s. Paid: %s. #%s." % (self.origin, self.destination, self.date.strftime("%m/%d/%Y"), 
-			costString(self.cost, self.usingPoints), self.flightNumber)
+		return "Paid %s for %s -> %s (#%s) on %s" % (costString(self.cost, self.usingPoints), self.origin, self.destination, self.flightNumber, self.date.strftime("%m/%d/%Y")) 
 
 	def basicStr(self):
 		return "%s -> %s on %s" % (self.origin, self.destination, self.date.strftime("%m/%d/%Y")) 
@@ -47,7 +46,8 @@ class UserFlight():
 		latestFare = self.fareHistory[-1]
 		currentCost = latestFare.points if self.usingPoints else latestFare.price
 		if (currentCost < self.cost):
-			return "Refund Found! The current cost is %s as of %s" % (costString(currentCost,self.usingPoints), latestFare.fare_validity_date.strftime("%m/%d/%Y")) + "\nFlight info: " + str(self)
+			diff = diffCostString(currentCost, self.cost, self.usingPoints)
+			return "Refund Found! Re-book on southwest.com for a refund of %s\n%s" % (diff,  str(self))
 		else:
 			return False
 
@@ -79,6 +79,7 @@ def checkForRefunds():
 		fares = getFaresForFlight(flight)
 		flight.addFares(fares)
 		refund = flight.checkRefund() 
+		print(flight)
 		if refund:
 			if not flight.sentEmail:
 				sendEmail(getUser(flight.username).email, 'Southwest Refund Found: ' + flight.basicStr(), refund)

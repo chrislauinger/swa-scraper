@@ -20,10 +20,15 @@ def fromMsEpoch(ms):
 def costString(cost, usingPoints):
 	return "%s%s %s" % ("$" if not usingPoints else "", cost, "points" if usingPoints else "")
 
+def diffCostString(currentPrice, cost, usingPoints):
+	diff = cost - currentPrice 
+	return "%s%s %s" % ("$" if not usingPoints else "", diff, "points" if usingPoints else "")
+
+
 def sendEmail(to, subject, message):
 	msg = MIMEText(message)
 	msg['To'] = email.utils.formataddr(('Recipient', to))
-	msg['From'] = email.utils.formataddr(('Dragon', author))
+	msg['From'] = email.utils.formataddr(('Dragon Fare Scanner', author))
 	msg['Subject'] = subject
 	try:
 		server = smtplib.SMTP("smtp.gmail.com", 587)

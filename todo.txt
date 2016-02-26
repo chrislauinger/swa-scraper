@@ -1,4 +1,5 @@
 Todo:
+if price drops further - send another email 
 Optimize website hits? 
 User stats displayed on webpage
 remember meta data?
@@ -15,8 +16,7 @@ Password
 Home screen says something like logout:   
 dropdown date menu more clear, test in all browsers
 Forgot username? (send to your email if give email)
-Note that app is in testing phase w/ improvements being released 
-Clean up refund email 
+Note that app is in testing phase w/ improvements being released  
 Charts - display with one data point
 Daily full scrpe: currently disabled, is this only getting the last date? (maybe never re-enable due to storage/scraping southwest) (make sure its storing midnight datetime)
 
