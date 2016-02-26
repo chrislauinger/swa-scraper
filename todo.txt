@@ -1,13 +1,13 @@
 Todo:
 Optimize website hits? 
 User stats displayed on webpage
-remember meta data
-Ajax call to python runUserFares
+remember meta data?
 Create table called UserFares that only holds fares for the user? --> somehoe create cache? 
 How to copyright webpage or github repo
 E2E testing
 Comment box 
-Web Security of connection 
+Web Security of connection
+Timing of single scrape on addFlight (request scrape then add to dynamo?)
 
 Home screen: screenshots and short explanations (email example, plot example)
 
@@ -15,18 +15,10 @@ Password
 Home screen says something like logout:   
 dropdown date menu more clear, test in all browsers
 Forgot username? (send to your email if give email)
-Note that app is in testing phase w/ improvements being released - please submit comments here. 
+Note that app is in testing phase w/ improvements being released 
 Clean up refund email 
-Loading message for Booked Flights
 Charts - display with one data point
-
-
-#notes on calling python function:  
-pass flight data thru and run it
-accept only specific kind of request
-NEED to get python to restart (maybe handle connection reset error)
-Add timeout to addFLight request
-
+Daily full scrpe: currently disabled, is this only getting the last date? (maybe never re-enable due to storage/scraping southwest) (make sure its storing midnight datetime)
 
 FAQ's section
 
@@ -45,6 +37,17 @@ Move code to private repo?
 Internnational: different source code format
 Email other bloggers to get links to my site
 
+
+#Flight Key datetime matching: 
+GOAL: store depart date midnight (should have used YYYYMMDD)
+
+UserFare DB: 
+generated from inputing flight: 
+retrieve to runUserFares: 
+retrieve for single fare: 
+
+Fare DB: 
+daily full scrape: all set to midnight (is this doing )
 
 
 

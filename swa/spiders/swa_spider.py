@@ -10,6 +10,9 @@ import re
 import itertools, collections
 import logging 
 from urlparse import urljoin
+import pytz
+import sys
+from helpers import * 
 
 class Util(object):
 	@classmethod
@@ -70,12 +73,15 @@ class SWAFareSpider(Spider):
 		self.origin = fromCity
 		self.days = int(days)
 		self.daysSearched = 0
-		if startDate == None:
+		if '/' in startDate:
+			print("incorrect date format")
+			sys.exit(1)
+		if startDate == None: #when scraping multiple days starting with today
 			self.currentDate = datetime.now() + timedelta(days=1)
 			self.currentDate =  self.currentDate.replace(hour=0, minute=0, second=0, microsecond=0)
-		elif type(startDate) == str:
-			self.currentDate = dateParse(startDate)
-		else:
+		elif type(startDate) == str: #when calling from command line - uses timesinceMidnight
+			self.currentDate = fromMsEpoch(int(startDate))	
+		else: #when calling from runUserFares (already is correct datetime object)
 			self.currentDate = startDate
 		self.destination = toCity
 
