@@ -1,23 +1,32 @@
 Todo:
-User report
-Fix DB scan to count number of fares in last 24 hours + email at Noon
 Optimize website hits? 
 User stats displayed on webpage
 remember meta data
 Ajax call to python runUserFares
 Create table called UserFares that only holds fares for the user? --> somehoe create cache? 
-queries: if scan > 5k items, will not get everything (currently a 2 days range)
 How to copyright webpage or github repo
 E2E testing
+Comment box 
+Web Security of connection 
 
-From feedback:
+Home screen: screenshots and short explanations (email example, plot example)
+
 Password
-Smaller Delete / Clear Form Button 
-Home screen says something like logout
-Add flight: note that all fields are required 
-More input validation: if I can't submit, then you must tell exactly what fields to fix
-Timezone of plots to time of flight  
+Home screen says something like logout:   
 dropdown date menu more clear, test in all browsers
+Forgot username? (send to your email if give email)
+Note that app is in testing phase w/ improvements being released - please submit comments here. 
+Clean up refund email 
+Loading message for Booked Flights
+Charts - display with one data point
+
+
+#notes on calling python function:  
+pass flight data thru and run it
+accept only specific kind of request
+NEED to get python to restart (maybe handle connection reset error)
+Add timeout to addFLight request
+
 
 FAQ's section
 

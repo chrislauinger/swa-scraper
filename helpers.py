@@ -25,7 +25,6 @@ def sendEmail(to, subject, message):
 	msg['To'] = email.utils.formataddr(('Recipient', to))
 	msg['From'] = email.utils.formataddr(('Dragon', author))
 	msg['Subject'] = subject
-
 	try:
 		server = smtplib.SMTP("smtp.gmail.com", 587)
 		server.ehlo()
