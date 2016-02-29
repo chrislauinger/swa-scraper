@@ -1,12 +1,7 @@
-currentt Release:
-Message if you have no booked flights: 
-Comment box - json server? 
-Timing of single scrape on addFlight (request scrape then add to dynamo?)
-Test Safari on Mac
-Warning - mutating the prototype cause code to run slow 
-
 
 Next Release: 
+Test Safari on Mac
+Warning - mutating the prototype cause code to run slow 
 if price drops further - send another email  
 E2E testing
 Web Security of connection
