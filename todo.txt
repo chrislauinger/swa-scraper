@@ -1,26 +1,20 @@
-Todo:
-if price drops further - send another email 
-Optimize website hits? 
-User stats displayed on webpage
-remember meta data?
-Create table called UserFares that only holds fares for the user? --> somehoe create cache? 
-How to copyright webpage or github repo
-E2E testing
-Comment box 
-Web Security of connection
+currentt Release:
+Message if you have no booked flights: 
+Comment box - json server? 
 Timing of single scrape on addFlight (request scrape then add to dynamo?)
+Test Safari on Mac
+Warning - mutating the prototype cause code to run slow 
 
-Home screen: screenshots and short explanations (email example, plot example)
 
-Password
-Home screen says something like logout:   
-dropdown date menu more clear, test in all browsers
-Forgot username? (send to your email if give email)
-Note that app is in testing phase w/ improvements being released  
-Charts - display with one data point
+Next Release: 
+if price drops further - send another email  
+E2E testing
+Web Security of connection
+Error validation: check if a user has a flight but no fares found. 
 Daily full scrpe: currently disabled, is this only getting the last date? (maybe never re-enable due to storage/scraping southwest) (make sure its storing midnight datetime)
-
 FAQ's section
+Password
+Forgot username? (send to your email if give email)
 
 
 #Auto Check in
@@ -30,24 +24,11 @@ Add confirmation number so we can do auto-checkIn
 
 #Search
 
-#Analysis:
-Once have enough data, do research on points/dollar ratios, etc
 
 Move code to private repo? 
 Internnational: different source code format
 Email other bloggers to get links to my site
 
-
-#Flight Key datetime matching: 
-GOAL: store depart date midnight (should have used YYYYMMDD)
-
-UserFare DB: 
-generated from inputing flight: 
-retrieve to runUserFares: 
-retrieve for single fare: 
-
-Fare DB: 
-daily full scrape: all set to midnight (is this doing )
 
 
 
