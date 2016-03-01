@@ -73,13 +73,13 @@ class SWAFareSpider(Spider):
 		self.origin = fromCity
 		self.days = int(days)
 		self.daysSearched = 0
-		if '/' in startDate:
-			print("incorrect date format")
-			sys.exit(1)
 		if startDate == None: #when scraping multiple days starting with today
 			self.currentDate = datetime.now() + timedelta(days=1)
 			self.currentDate =  self.currentDate.replace(hour=0, minute=0, second=0, microsecond=0)
 		elif type(startDate) == str: #when calling from command line - uses timesinceMidnight
+                        if '/' in startDate:
+                                print("incorrect date format")
+                                sys.exit(1)
 			self.currentDate = fromMsEpoch(int(startDate))	
 		else: #when calling from runUserFares (already is correct datetime object)
 			self.currentDate = startDate
