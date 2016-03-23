@@ -30,7 +30,7 @@ class UserFlight():
 		self.fareHistory = []
 		self.maxDrop = 0
 		if ('max_drop' in item):
-			self.maxDrop = item['max_drop']
+			self.maxDrop = int(item['max_drop'])
 
 	def __str__(self):
 		return "%s paid %s for %s -> %s (#%s) on %s" % (self.username, costString(self.cost, self.usingPoints), self.origin, self.destination, self.flightNumber, self.date.strftime("%m/%d/%Y")) 
@@ -49,7 +49,7 @@ class UserFlight():
 		latestFare = self.fareHistory[-1]
 		currentCost = latestFare.points if self.usingPoints else latestFare.price
 		if (currentCost < self.cost):
-			diff = diffCostString(currentCost, self.cost, self.usingPoints)
+			diff = self.cost - currentCost
 			return diff 
 		else:
 			return False
@@ -86,6 +86,7 @@ def getAllFlights():
 
 def checkForRefunds():
 	flights = getAllFlights()
+	#flights = getUserFlights('chrislauinger')
 	for flight in flights:
 		fares = getFaresForFlight(flight)
 		flight.addFares(fares)
@@ -93,9 +94,8 @@ def checkForRefunds():
 		print(flight)
 		if refund:
 			if refund > flight.maxDrop:
-				refundStr = "Refund Found! Re-book on southwest.com for a refund of %s\n%s" % (refund,  str(flight))
+				refundStr = "Refund Found! Re-book on southwest.com for a refund of %s\n%s\nYou will receive another email if the price drops lower" % (diffCostString(refund, flight.usingPoints),  str(flight))
 				sendEmail(getUser(flight.username).email, 'Southwest Refund Found: ' + flight.basicStr(), refundStr)
-				print(refund)
 				flight.maxDrop = refund
 				putUserFlight(flight)
 			else:

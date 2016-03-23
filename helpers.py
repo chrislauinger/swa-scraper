@@ -20,8 +20,7 @@ def fromMsEpoch(ms):
 def costString(cost, usingPoints):
 	return "%s%s %s" % ("$" if not usingPoints else "", cost, "points" if usingPoints else "")
 
-def diffCostString(currentPrice, cost, usingPoints):
-	diff = cost - currentPrice 
+def diffCostString(diff, usingPoints):
 	return "%s%s %s" % ("$" if not usingPoints else "", diff, "points" if usingPoints else "")
 
 
