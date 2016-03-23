@@ -17,12 +17,6 @@ class User():
 		self.lastName = item['last_name']
 		self.email = item['email']
 
-def dynamoResponseToObjects(response):
-	users = []
-	for item in response['Items']:
-		users.append(User(item))
-	return users
-
 def getUser(username):
 	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
 	response = table.get_item(Key= {'username' : username})
@@ -31,7 +25,14 @@ def getUser(username):
 def getAllUsernames():
 	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
 	response = table.scan(AttributesToGet=['username'])
-	return dynamoResponseToObjects(response)
+	items = response['Items']
+	while(response.has_key('LastEvaluatedKey')):
+		response = table.scan(AttributesToGet=['username'], ExclusiveStartKey = response['LastEvaluatedKey'])
+		items = items + response['Items']
+	usernames = []
+	for item in items:
+		usernames.append(item['username'])
+	return usernames
 
 def countUsers():
 	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)

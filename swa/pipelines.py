@@ -40,7 +40,7 @@ class DynamoPipeline(object):
         itemDict['depart'] = toMsEpoch(itemDict['depart'])
         itemDict['fare_validity_date'] = toMsEpoch(itemDict['fare_validity_date'])
         itemDict['route'] = itemDict['origin'] + "_" + itemDict['destination']
-        itemDict['sort_key'] = str(itemDict['depart']) + "_" + str(itemDict['fare_validity_date'])
+        itemDict['sort_key'] = str(itemDict['depart']) + "_" + str(itemDict['fare_validity_date']) + "_" + str(itemDict['flight'][0]) #need flight num so sort keys are not the same
         itemDict['flight'] = int(itemDict['flight'][0])
         itemDict['flight_key'] = itemDict['route'] + "_" + str(toMsEpoch(itemDict['depart_date'])) + "_" + str(itemDict['flight'])
         del itemDict['depart_date']

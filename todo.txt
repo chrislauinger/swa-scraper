@@ -1,8 +1,17 @@
 
+Short list todo:  
+why are some flights not showing up? (2-3hrs)
+admin mode: be able to see everyones flights (2-3hrs)
+if price drops further - send another email (2-3hrs) (written need to test)
+when entering flight info, after date/route entered -> pull up flight numbers/times/prices options - (10-20hrs) (+ be able to add multiple flights at once)
+ -- need to figure out modal
+ -- must add button - will need to scrape first 
+Remove auto check in and reference to FAQ (1hr) 
+scrape into smaller DB (2 hrs) 
+create sequenctional version of run user fares (took 38min?)
+southwest fare saver is sending the emails
+
 Next Release: 
-Test Safari on Mac
-Warning - mutating the prototype cause code to run slow 
-if price drops further - send another email  
 E2E testing
 Web Security of connection
 Error validation: check if a user has a flight but no fares found. 
@@ -10,6 +19,7 @@ Daily full scrpe: currently disabled, is this only getting the last date? (maybe
 FAQ's section
 Password
 Forgot username? (send to your email if give email)
+International parsing
 
 
 #Auto Check in
@@ -23,6 +33,18 @@ Add confirmation number so we can do auto-checkIn
 Move code to private repo? 
 Internnational: different source code format
 Email other bloggers to get links to my site
+
+
+Test process:
+run user fares
+find which flights do not have any fares
+spot check on southwest
+make sure this lines up with browser display
+
+
+Bug example:
+flight 1126 June 21 still not showing all fares..
+
 
 
 

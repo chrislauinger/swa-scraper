@@ -2,9 +2,9 @@ from itertools import permutations
 from scraper import * 
 import swa.settings as settings
 from datetime import datetime, timedelta
-from userFlights_db import *
-from user_db import *
 
+import boto3
+from boto3.dynamodb.conditions import Key, Attr 
 #dynamo db for fares
 TABLE_NAME = 'fares'
 REGION = 'us-west-2'
@@ -33,20 +33,26 @@ class Fare():
 	def detailedString(self):
 		return self.sort_key
 
-def dynamoResponseToObjects(response):
+def dynamoResponseToObjects(items):
 	fares = []
-	for item in response['Items']:
+	for item in items:
 		fares.append(Fare(item))
-	
 	return fares
 
 def getFaresForFlight(userFlight):
 	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
 	dateLowerBound = toMsEpoch(userFlight.date)
-	dateUpperBound = toMsEpoch(userFlight.date + timedelta(days=2)) #depart dates were wrong, adding a day to departure if arrival was past midnight (depart time used in sort_key)
+	dateUpperBound = toMsEpoch(userFlight.date + timedelta(days=1)) 
+	print(dateLowerBound)
+	print(dateUpperBound)
 	response = table.query(KeyConditionExpression=Key('route').eq(userFlight.route) & Key('sort_key').between(str(dateLowerBound),str(dateUpperBound)),
 		FilterExpression=Key('flight_key').eq(userFlight.flightKey))
-	fares = dynamoResponseToObjects(response)
+	items = response['Items']
+	while(response.has_key('LastEvaluatedKey')):
+		response = table.query(KeyConditionExpression=Key('route').eq(userFlight.route) & Key('sort_key').between(str(dateLowerBound),str(dateUpperBound)),
+			FilterExpression=Key('flight_key').eq(userFlight.flightKey), ExclusiveStartKey = response['LastEvaluatedKey'])
+		items = items + response['Items']
+	fares = dynamoResponseToObjects(items)
 	fares.sort(key=lambda x: x.fare_validity_date, reverse=False) #todo: dynamodb should return query in sorted order but not working? 
 	return fares
 
@@ -57,4 +63,5 @@ def countFares():
 
 if __name__ == '__main__':
 	countFares()
+
 	
