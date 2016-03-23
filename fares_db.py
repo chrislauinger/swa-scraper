@@ -43,8 +43,6 @@ def getFaresForFlight(userFlight):
 	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
 	dateLowerBound = toMsEpoch(userFlight.date)
 	dateUpperBound = toMsEpoch(userFlight.date + timedelta(days=1)) 
-	print(dateLowerBound)
-	print(dateUpperBound)
 	response = table.query(KeyConditionExpression=Key('route').eq(userFlight.route) & Key('sort_key').between(str(dateLowerBound),str(dateUpperBound)),
 		FilterExpression=Key('flight_key').eq(userFlight.flightKey))
 	items = response['Items']
