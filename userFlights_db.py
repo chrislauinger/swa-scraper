@@ -126,5 +126,5 @@ def minPointsFlight():
 
 
 if __name__ == '__main__':
-	#print(str(printFlightsWithoutFares()))
-	minPointsFlight()
+	print(str(printFlightsWithoutFares()))
+	#minPointsFlight()

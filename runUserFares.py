@@ -7,4 +7,4 @@ from userFlights_db import *
 
 if __name__ == '__main__':
 	flights = getAllFlights()
-	runUserFlights(flights)
+	runUserFlightsSeq(flights)
