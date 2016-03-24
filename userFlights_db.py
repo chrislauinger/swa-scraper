@@ -30,7 +30,7 @@ class UserFlight():
 		self.fareHistory = []
 		self.maxDrop = 0
 		if ('max_drop' in item):
-			self.maxDrop = int(item['max_drop'])
+			self.maxDrop = float(item['max_drop'])
 
 	def __str__(self):
 		return "%s paid %s for %s -> %s (#%s) on %s" % (self.username, costString(self.cost, self.usingPoints), self.origin, self.destination, self.flightNumber, self.date.strftime("%m/%d/%Y")) 
@@ -74,6 +74,9 @@ def getUserFlights(username):
 		items = items + response['Items']
 	return dynamoResponseToObjects(items)
 
+def removeOldFlights():
+	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
+
 
 def getAllFlights():
 	table = boto3.resource('dynamodb', region_name=REGION, endpoint_url=AWS_URL).Table(TABLE_NAME)
@@ -97,14 +100,14 @@ def removeScrapeDups(flights):
 
 def checkForRefunds():
 	flights = getAllFlights()
-	#flights = getUserFlights('chrislauinger')
+	#flights = getUserFlights('scottblackburn')
 	for flight in flights:
 		fares = getFaresForFlight(flight)
 		flight.addFares(fares)
 		refund = flight.checkRefund()
 		print(flight)
 		if refund:
-			if refund > flight.maxDrop:
+			if refund > (flight.maxDrop + 1): #+1 for rounding error
 				refundStr = "Refund Found! Re-book on southwest.com for a refund of %s\n%s\nYou will receive another email if the price drops lower" % (diffCostString(refund, flight.usingPoints),  str(flight))
 				sendEmail(getUser(flight.username).email, 'Southwest Refund Found: ' + flight.basicStr(), refundStr)
 				flight.maxDrop = refund

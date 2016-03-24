@@ -1,10 +1,11 @@
 
 Short list todo:  
-
+Script to delete old fares/flights (2hrs) 
 when entering flight info, after date/route entered -> pull up flight numbers/times/prices options - (10-20hrs) (+ be able to add multiple flights at once)
  -- need to figure out modal
  -- must add button - will need to scrape first 
-scrape into smaller DB (2 hrs) 
+scrape into smaller DB (2 hrs)?  
+add to report: total max drop for price/points
 
 Scraping every 3 hours:
 This buys me about 5k userflights (currently at 1k) assuming each scrape is 2seconds
