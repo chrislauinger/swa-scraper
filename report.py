@@ -18,29 +18,51 @@ for username in usernames:
 		usersNoFlights = usersNoFlights + 1
 usernameRank = sorted(usernameRank, key=lambda tup: tup[1], reverse = True)
 
-def countFlightsWithoutFares():
-	flights = getAllFlights()
-	count = 0
-	for flight in flights:
-		fares = getFaresForFlight(flight)
-		if (len(fares) == 0):
-			count = count + 1
-	return count
+flights = getAllFlights()
+flightsNoFares = 0
+for flight in flights:
+	fares = getFaresForFlight(flight)
+	if (len(fares) == 0):
+		flightsNoFares = flightsNoFares + 1
 
-flights = countUserFlights()
+flightCount = countUserFlights()
 users = countUsers()
+fares = countFares()
 
-flightsNoFaresPerc = 100.0 * float(countFlightsWithoutFares()) / float(flights)
+flightsNoFaresPerc = 100.0 * float(flightsNoFares) / float(flightCount)
 usersNoFlightsPerc =  100.0 * float(usersNoFlights) / float(users)
 
+email_str = "Fares: %s\nUsers: %s\nUserFlights: %s \n\nPercent users with no flight: %s%%\nPercent flights with no fares: %s%%" % ("{:,}".format(fares), "{:,}".format(users), "{:,}".format(flightCount), "{:10.1f}".format(usersNoFlightsPerc), "{:10.1f}".format(flightsNoFaresPerc)) + "\n"
 
-email_str = "Fares: %s\nUsers: %s\nUserFlights: %s \n\nUsers with no flight: %s% \nFlights with no fares: %s%" % ("{:,}".format(countFares()), "{:,}".format(users), "{:,}".format(flights), "{:10.1f}".format(usersNoFlightsPerc), "{:10.1f}".format(flightsNoFaresPerc)) + "\n"
+############### Display top 5 users ##################
 
 i = 0
 for item in usernameRank:
 	i = i + 1
 	email_str = email_str + "\n" + item[0] + ": " + str(item[1])
 	if i > 5: 
+		break
+
+
+############# Display top 5 flights with stalest fares ###############
+email_str = email_str + "\n" 
+times = []
+nowtime = datetime.now()
+for flight in flights:
+	if flight.date < (datetime.now() +  timedelta(days=3)): #close flight
+		continue
+	fares = getFaresForFlight(flight)
+	if len(fares) > 0:
+		diff = nowtime - fares[-1].fare_validity_date
+		times.append((flight,diff))
+
+times = sorted(times, key=lambda a: a[1], reverse = True)
+
+a = 1
+for t in times:
+	email_str = email_str + "\n" + str(t[0]) + ": " + str(t[1])
+	a = a + 1
+	if a > 5:
 		break
 
 subject = "Daily Report: %s" % (datetime.now().strftime("%m/%d/%Y"))
