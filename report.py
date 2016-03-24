@@ -34,7 +34,7 @@ flightsNoFaresPerc = 100.0 * float(countFlightsWithoutFares()) / float(flights)
 usersNoFlightsPerc =  100.0 * float(usersNoFlights) / float(users)
 
 
-email_str = "Fares: %s\nUsers: %s\nUserFlights: %s \n\nUsers with no flight: %s \nFlights with no fares: %s" % ("{:,}".format(countFares()), "{:,}".format(users), "{:,}".format(flights), "{:10.1f}".format(usersNoFlightsPerc), "{:10.1f}".format(flightsNoFaresPerc)) + "\n"
+email_str = "Fares: %s\nUsers: %s\nUserFlights: %s \n\nUsers with no flight: %s% \nFlights with no fares: %s%" % ("{:,}".format(countFares()), "{:,}".format(users), "{:,}".format(flights), "{:10.1f}".format(usersNoFlightsPerc), "{:10.1f}".format(flightsNoFaresPerc)) + "\n"
 
 i = 0
 for item in usernameRank:

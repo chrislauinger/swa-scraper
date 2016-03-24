@@ -84,6 +84,17 @@ def getAllFlights():
 		items = items + response['Items']
 	return dynamoResponseToObjects(items)
 
+def removeScrapeDups(flights):
+	cleanList = []
+	keyList = []
+	for flight in flights:
+		key = flight.route + flight.date.strftime("%m/%d/%Y")		
+		if key not in keyList:
+			cleanList.append(flight)
+			keyList.append(key)
+	diff = len(flights) - len(cleanList)
+	return cleanList
+
 def checkForRefunds():
 	flights = getAllFlights()
 	#flights = getUserFlights('chrislauinger')
@@ -122,6 +133,7 @@ def minPointsFlight():
 			if (fare.points < minPoints):
 				minPoints = fare.points
 				print(minPoints)
+
 
 
 
